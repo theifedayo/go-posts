@@ -70,7 +70,17 @@ func PostsUpdate(c *gin.Context) {
 	config.DB.Model(&post).Updates(models.Post{Title: body.Title, Content: body.Content})
 
 	c.JSON(200, gin.H{
-		"message": "post retrieved successfully",
+		"message": "post updated successfully",
 		"data":    post,
+	})
+}
+
+func PostsDelete(c *gin.Context) {
+	id := c.Param("id")
+
+	config.DB.Delete(&models.Post{}, id)
+
+	c.JSON(200, gin.H{
+		"message": "post deleted successfully",
 	})
 }
