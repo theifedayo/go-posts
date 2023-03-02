@@ -30,7 +30,6 @@ func PostsCreate(c *gin.Context) {
 		"message": "post created successfully",
 		"data":    post,
 	})
-
 }
 
 func PostsList(c *gin.Context) {
@@ -41,5 +40,37 @@ func PostsList(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "posts retrieved successfully",
 		"data":    posts,
+	})
+}
+
+func PostsDetail(c *gin.Context) {
+
+	id := c.Param("id")
+
+	var post models.Post
+	config.DB.First(&post, id)
+
+	c.JSON(200, gin.H{
+		"message": "post retrieved successfully",
+		"data":    post,
+	})
+}
+
+func PostsUpdate(c *gin.Context) {
+	id := c.Param("id")
+	var body struct {
+		Title   string
+		Content string
+	}
+
+	c.Bind(&body)
+	var post models.Post
+	config.DB.First(&post, id)
+
+	config.DB.Model(&post).Updates(models.Post{Title: body.Title, Content: body.Content})
+
+	c.JSON(200, gin.H{
+		"message": "post retrieved successfully",
+		"data":    post,
 	})
 }
